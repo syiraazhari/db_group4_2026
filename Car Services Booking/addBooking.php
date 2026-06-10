@@ -56,7 +56,7 @@ if (isset($_POST['add'])) {
         $vehicleID = mysqli_insert_id($conn);
 
         // 2. Insert booking using vehicleID
-        $bookingSql = "INSERT INTO booking
+        $bookingSql = "INSERT INTO bookings
                        (email, vehicleID, bookingDate, bookingTime, bookingStatus, bookingNotes)
                        VALUES
                        ('$email', '$vehicleID', '$bookingDate', '$bookingTime', '$bookingStatus', '$bookingNotes')";
