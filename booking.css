@@ -1,0 +1,171 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#CFE3F1;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:40px 20px;
+}
+
+.booking-container{
+    width:100%;
+    max-width:850px;
+    background:#fff;
+    padding:40px;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* Header */
+
+.booking-header{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.booking-header h2{
+    color:#2d2d2d;
+    font-size:32px;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.booking-header p{
+    color:#888;
+    font-size:15px;
+}
+
+/* Section Titles */
+
+h3{
+    color:#243A5E;
+    font-size:18px;
+    margin-top:25px;
+    margin-bottom:18px;
+    padding-bottom:8px;
+    border-bottom:2px solid #f0f0f0;
+}
+
+/* Form Layout */
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:500;
+    color:#555;
+}
+
+/* Inputs */
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:14px 16px;
+    border:1px solid #e5e5e5;
+    border-radius:12px;
+    background:#fafafa;
+    font-size:15px;
+    transition:all 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    background:#fff;
+    border-color:#5a4ff3;
+    box-shadow:0 0 0 4px rgba(90,79,243,0.15);
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+/* Select Styling */
+
+select{
+    cursor:pointer;
+}
+
+/* Submit Button */
+
+.submit-btn{
+    width:100%;
+    margin-top:15px;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(
+        90deg,
+        #334EAC,
+        #FFF9F0
+    );
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+
+.submit-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(90,79,243,0.35);
+}
+
+/* Nice Card Feel */
+
+.booking-container:hover{
+    box-shadow:0 18px 45px rgba(0,0,0,0.1);
+}
+
+/* Placeholder */
+
+input::placeholder,
+textarea::placeholder{
+    color:#aaa;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .booking-container{
+        padding:25px;
+    }
+
+    .row{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .booking-header h2{
+        font-size:26px;
+    }
+
+    h3{
+        font-size:16px;
+    }
+}
