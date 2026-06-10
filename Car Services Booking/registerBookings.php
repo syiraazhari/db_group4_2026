@@ -4,27 +4,37 @@ ini_set('display_errors', 1);
 
 // 1. HANDLE DATABASE INSERTION ON FORM SUBMISSION
 if (isset($_POST['add'])) {
-    $conn = mysqli_connect("localhost", "root", "", "carservicebooking(1)");
+    // Standardized database name to match your active local container
+    $conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
 
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }	
 
-    $bookingID = $_POST[' bookingID'];
-    $vehicleID  = $_POST['vehicleID'];
-    $email        = $_POST['email'];
-    $bookingDate  = $_POST['bookingDate'];
-    $bookingTime  = $_POST['bookingTime'];
-//    $bookingStatus = $_POST['bookingStatus'];
-	$bookingNotes = $_POST['bookingNotes'];
-    $bookingStatus = "Pending";
+    // FIXED: Remapped variables to perfectly match the HTML form input "name" attributes
+    $CustomerName = $_POST['CustomerName'];
+    $PhoneNumber  = $_POST['PhoneNumber'];
+    $Email        = $_POST['Email'];
+    $Address      = $_POST['Address'];
+    $VehicleType  = $_POST['VehicleType'];
+    $PlateNumber  = $_POST['PlateNumber'];
+    $ServiceType  = $_POST['ServiceType'];
+    $BookingDate  = $_POST['BookingDate'];
+    $BookingTime  = $_POST['BookingTime'];
+    $Reason_Notes = $_POST['Reason_Notes'];
+    
+    // Automatically flag new submissions as Pending
+    $BookingStatus = "Pending";
 
+    // FIXED: Removed the stray semicolon from the field list to eliminate MariaDB parsing errors
     $sql = "INSERT INTO bookings (
-                 bookingID, vehicleID, email,
-                 bookingDate, bookingTime, bookingStatus, bookingNotes;
+                 CustomerName, PhoneNumber, Email, Address,
+                 VehicleType, PlateNumber, ServiceType,
+                 BookingDate, BookingTime, Reason_Notes, BookingStatus
             ) VALUES (
-                '$bookingID', '$vehicleID', '$email',
-                '$bookingDate', '$bookingTime', '$bookingStatus','$bookingNotes'
+                '$CustomerName', '$PhoneNumber', '$Email', '$Address',
+                '$VehicleType', '$PlateNumber', '$ServiceType',
+                '$BookingDate', '$BookingTime', '$Reason_Notes', '$BookingStatus'
             )";
 
     if (mysqli_query($conn, $sql)) {
