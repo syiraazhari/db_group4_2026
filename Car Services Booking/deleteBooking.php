@@ -9,7 +9,7 @@ if(isset($_GET['id'])){
 
     $BookingID = mysqli_real_escape_string($conn, $_GET['id']);
 
-*    $sql = "DELETE FROM booking_tbl WHERE BookingID = '$BookingID'";
+*    $sql = "DELETE FROM bookings WHERE BookingID = '$BookingID'";
     
     if(mysqli_query($conn, $sql)){
   

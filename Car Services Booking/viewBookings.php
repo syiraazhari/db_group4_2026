@@ -2,13 +2,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = mysqli_connect("localhost", "root", "root", "carServices_db");
+$conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_error($conn));
 }
 
-$sql = "SELECT * FROM booking_tbl ORDER BY id";
+$sql = "SELECT * FROM bookings ORDER BY id";
 $result = mysqli_query($conn, $sql);
 ?>
 
@@ -33,17 +33,18 @@ $result = mysqli_query($conn, $sql);
                 
                 <table class="table table-striped table-bordered">
                     <thead class="table-dark">
-                        <tr><th>ID</th><th>Name</th><th>Contact No.</th><th>Username</th><th>Password</th><th>Action</th></tr>
+                        <tr><th>Name</th><th>Contact No.</th><th>Service Type</th><th>Vehicle Type</th><th>Plate Number</th></<th>Action</th></tr>
                     </thead>
                     <tbody>
                         <?php while($row = mysqli_fetch_assoc($result)): ?>
                         <tr>
                             <td><?php echo $row['id']; ?></td>
-                            <td><?php echo htmlspecialchars($row['customer_name']); ?></td>
-                            <td><?php echo htmlspecialchars($row['contact_no']); ?></td>
-                            <td><?php echo htmlspecialchars($row['username']); ?></td>
-                            <td><?php echo htmlspecialchars($row['password']); ?></td>
-                            <td>
+                            <td><?php echo htmlspecialchars($row['customerName']); ?></td>
+                            <td><?php echo htmlspecialchars($row['phoneNumber']); ?></td>
+                            <td><?php echo htmlspecialchars($row['serviceType']); ?></td>
+                            <td><?php echo htmlspecialchars($row['vehicleType']); ?></td>
+                            <td><?php echo htmlspecialchars($row['plateNumber']); ?></td>
+							<td>
                                 <a href="updateBooking.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="deleteBooking.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">Delete</a>
                             </td>
