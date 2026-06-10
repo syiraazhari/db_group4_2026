@@ -9,7 +9,7 @@ if (!$conn) {
 
 if (isset($_POST['login'])) {
 
-    $username = $_POST['username'];
+    $username = $_POST['user'];
     $password = $_POST['passkey'];
 
     $sql = "SELECT username, fName, lName, role 
