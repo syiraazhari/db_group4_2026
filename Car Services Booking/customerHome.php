@@ -16,7 +16,7 @@
                 <div class="d-grid gap-3">
                     <a href="viewBookings.php" class="btn btn-primary btn-lg">My Bookings Appointment</a>
                     <a href="customerVehicles.php" class="btn btn-secondary btn-lg">My Vehicles</a>
-                    <a href="registerBooking.php" class="btn btn-success btn-lg">Book An Appointment</a>
+                    <a href="registerBookings.php" class="btn btn-success btn-lg">Book An Appointment</a>
                     <a href="profilecustomer.php" class="btn btn-info text-white btn-lg">My Profile</a>
                     <a href="logoutprocess.php" class="btn btn-danger btn-lg">Log Out</a>
                 </div>
