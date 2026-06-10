@@ -65,10 +65,10 @@
 
 
       </ul>
-      <form class="d-flex me-2" role="search">
+      <!--<form class="d-flex me-2" role="search">
         <input class="form-control me-2" type="search" placeholder="🔍︎Search" aria-label="Search"/>
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      </form>-->
 	  
 	   <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
        <a href="registerCustomer.php" class="btn btn-primary">Register</a>

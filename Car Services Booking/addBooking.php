@@ -1,168 +1,276 @@
 <?php
+session_start();
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = mysqli_connect(
-    "localhost",
-    "root",
-    "",
-    "carservicesbooking"
-);
+// Make sure user is logged in
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
 
-if(!$conn){
+// Make sure only customer can access
+if ($_SESSION['role'] != "Customer") {
+    header("Location: login.php");
+    exit();
+}
+
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking");
+
+if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+// Get logged-in customer info from session
+$username = $_SESSION['username'];
+$email = $_SESSION['email'];
+$fullName = $_SESSION['fName'] . " " . $_SESSION['lName'];
+
 $formSubmitted = false;
 
-if(isset($_POST['add'])){
+if (isset($_POST['add'])) {
 
-    $services = isset($_POST['serviceType']) ? $_POST['serviceType'] : [];
-    $serviceList = implode(", ", $services); 
-    
-    $customerName = mysqli_real_escape_string($conn, $_POST['customerName']);
-    $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
-
+    // Vehicle form data
     $vehicleType = mysqli_real_escape_string($conn, $_POST['vehicleType']);
+    $maker = mysqli_real_escape_string($conn, $_POST['maker']);
+    $model = mysqli_real_escape_string($conn, $_POST['model']);
+    $year = mysqli_real_escape_string($conn, $_POST['year']);
     $plateNumber = mysqli_real_escape_string($conn, $_POST['plateNumber']);
 
-    $serviceTypeEscaped = mysqli_real_escape_string($conn, $serviceList); 
-
+    // Booking form data
     $bookingDate = mysqli_real_escape_string($conn, $_POST['bookingDate']);
     $bookingTime = mysqli_real_escape_string($conn, $_POST['bookingTime']);
+    $bookingNotes = mysqli_real_escape_string($conn, $_POST['bookingNotes']);
+    $bookingStatus = "Pending";
 
-    $reasonNotes = mysqli_real_escape_string($conn, $_POST['reasonNotes']);
+    // 1. Insert vehicle first
+    $vehicleSql = "INSERT INTO vehicles 
+                   (username, vehicleType, maker, model, year, plateNumber)
+                   VALUES
+                   ('$username', '$vehicleType', '$maker', '$model', '$year', '$plateNumber')";
 
+    if (mysqli_query($conn, $vehicleSql)) {
 
-    // $sql = "INSERT INTO bookings (...) VALUES (...)";
-    // mysqli_query($conn, $sql);
+        // Get the newly created vehicleID
+        $vehicleID = mysqli_insert_id($conn);
 
-    $formSubmitted = true;
+        // 2. Insert booking using vehicleID
+        $bookingSql = "INSERT INTO booking
+                       (email, vehicleID, bookingDate, bookingTime, bookingStatus, bookingNotes)
+                       VALUES
+                       ('$email', '$vehicleID', '$bookingDate', '$bookingTime', '$bookingStatus', '$bookingNotes')";
 
-    echo "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9;'>";
-    echo "<h2 style='color: green;'>Booking Submitted Successfully</h2>";
+        if (mysqli_query($conn, $bookingSql)) {
+            $formSubmitted = true;
+        } else {
+            echo "Booking Error: " . mysqli_error($conn);
+        }
 
-    echo "<b>Customer:</b> $customerName<br>";
-    echo "<b>Phone:</b> $phoneNumber<br>";
-    echo "<b>Email:</b> $email<br>";
-    echo "<b>Address:</b> $address<br><br>";
-
-    echo "<b>Vehicle:</b> $vehicleType<br>";
-    echo "<b>Plate Number:</b> $plateNumber<br><br>";
-
-    echo "<b>Service(s):</b> $serviceTypeEscaped<br>";
-    echo "<b>Date:</b> $bookingDate<br>";
-    echo "<b>Time:</b> $bookingTime<br>";
-    echo "<b>Notes:</b> $reasonNotes<br><br>";
-    echo "<a href=''>Book Another Appointment</a>";
-    echo "</div>";
+    } else {
+        echo "Vehicle Error: " . mysqli_error($conn);
+    }
 }
 
 mysqli_close($conn);
-
-// Only show the form if it hasn't been submitted yet
-if (!$formSubmitted): 
 ?>
+
+<?php if ($formSubmitted): ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Successful</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Booking Submitted',
+        text: 'Your appointment has been submitted successfully. Status: Pending.',
+        confirmButtonText: 'OK'
+    }).then(function() {
+        window.location.href = 'customerhome.php';
+    });
+</script>
+
+</body>
+</html>
+
+<?php else: ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Service Booking</title>
+    <title>Book Appointment</title>
+
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .form-container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { margin-top: 0; color: #333; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        h3 { margin-top: 20px; color: #555; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #666; }
-        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="date"], .form-group input[type="time"], .form-group textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .checkbox-group { margin: 10px 0; }
-        .checkbox-group label { font-weight: normal; margin-left: 5px; }
-        .btn-submit { background-color: #3498db; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
-        .btn-submit:hover { background-color: #2980b9; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 25px;
+            color: #555;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            background-color: #6c757d;
+            color: white;
+            padding: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="form-container">
+
     <h2>Book a Car Service Appointment</h2>
+
     <form action="" method="POST">
-        
+
         <h3>Customer Information</h3>
+
         <div class="form-group">
-            <label for="customerName">Full Name</label>
-            <input type="text" id="customerName" name="customerName" required>
+            <label>Full Name</label>
+            <input type="text" value="<?php echo $fullName; ?>" readonly>
         </div>
-        
+
         <div class="form-group">
-            <label for="phoneNumber">Phone Number</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" id="address" name="address" required>
+            <label>Email</label>
+            <input type="email" value="<?php echo $email; ?>" readonly>
         </div>
 
         <h3>Vehicle Information</h3>
+
         <div class="form-group">
-            <label for="vehicleType">Vehicle Model / Type (e.g., Honda Civic)</label>
-            <input type="text" id="vehicleType" name="vehicleType" required>
+            <label for="vehicleType">Vehicle Type</label>
+            <select id="vehicleType" name="vehicleType" required>
+                <option value="" disabled selected>-- Select Vehicle Type --</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="MPV">MPV</option>
+                <option value="Pickup Truck">Pickup Truck</option>
+                <option value="Van">Van</option>
+                <option value="Other">Other</option>
+            </select>
         </div>
-        
+
+        <div class="form-group">
+            <label for="maker">Maker</label>
+            <input type="text" id="maker" name="maker" placeholder="Example: Perodua, Proton, Honda" required>
+        </div>
+
+        <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" id="model" name="model" placeholder="Example: Myvi, Saga, Civic" required>
+        </div>
+
+        <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" placeholder="Example: 2020" required>
+        </div>
+
         <div class="form-group">
             <label for="plateNumber">Plate Number</label>
-            <input type="text" id="plateNumber" name="plateNumber" required>
+            <input type="text" id="plateNumber" name="plateNumber" placeholder="Example: ABC1234" required>
         </div>
 
-        <h3>Service Details</h3>
+        <h3>Booking Details</h3>
+
         <div class="form-group">
-            <label>Select Services Required</label>
-            <div class="checkbox-group">
-                <input type="checkbox" name="serviceType[]" value="Oil Change" id="oil">
-                <label for="oil">Oil Change</label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" name="serviceType[]" value="Brake Repair" id="brakes">
-                <label for="brakes">Brake Repair</label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" name="serviceType[]" value="Tire Rotation" id="tires">
-                <label for="tires">Tire Rotation / Alignment</label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" name="serviceType[]" value="Engine Diagnostics" id="engine">
-                <label for="engine">Engine Diagnostics</label>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="bookingDate">Preferred Date</label>
+            <label for="bookingDate">Booking Date</label>
             <input type="date" id="bookingDate" name="bookingDate" required>
         </div>
-        
+
         <div class="form-group">
-            <label for="bookingTime">Preferred Time</label>
+            <label for="bookingTime">Booking Time</label>
             <input type="time" id="bookingTime" name="bookingTime" required>
         </div>
-        
+
         <div class="form-group">
-            <label for="reasonNotes">Additional Notes / Symptoms</label>
-            <textarea id="reasonNotes" name="reasonNotes" rows="4" placeholder="Describe any issues your car is having..."></textarea>
+            <label for="bookingNotes">Booking Notes</label>
+            <textarea id="bookingNotes" name="bookingNotes" rows="4" placeholder="Describe your car issue or service request..."></textarea>
         </div>
 
-        <button type="submit" name="add" class="btn-submit">Submit</button>
+        <button type="submit" name="add" class="btn-submit">Submit Booking</button>
+
+        <a href="customerhome.php" class="btn-back">Back to Customer Home</a>
+
     </form>
+
 </div>
 
 </body>

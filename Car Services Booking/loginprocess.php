@@ -12,10 +12,10 @@ if (isset($_POST['login'])) {
     $username = $_POST['user'];
     $password = $_POST['passkey'];
 
-    $sql = "SELECT username, fName, lName, role 
-            FROM account
-            WHERE username = '$username' 
-            AND password = '$password'";
+	$sql = "SELECT username, fName, lName, email, contactNo, address, role 
+        FROM account
+        WHERE username = '$username' 
+        AND password = '$password'";
 
     $result = mysqli_query($conn, $sql);
 
@@ -23,10 +23,13 @@ if (isset($_POST['login'])) {
 
         $row = mysqli_fetch_assoc($result);
 
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['fName'] = $row['fName'];
-        $_SESSION['lName'] = $row['lName'];
-        $_SESSION['role'] = $row['role'];
+	$_SESSION['username'] = $row['username'];
+	$_SESSION['fName'] = $row['fName'];
+	$_SESSION['lName'] = $row['lName'];
+	$_SESSION['email'] = $row['email'];
+	$_SESSION['contactNo'] = $row['contactNo'];
+	$_SESSION['address'] = $row['address'];
+	$_SESSION['role'] = $row['role'];
 
         if ($row['role'] == "admin") {
             header("Location: admindashboard.php");
