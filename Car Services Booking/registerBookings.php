@@ -10,7 +10,6 @@ if (isset($_POST['add'])) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Fixed: Removed the stray trailing parentheses ')'
     $CustomerName = $_POST['CustomerName'];
     $PhoneNumber  = $_POST['PhoneNumber'];
     $Email        = $_POST['Email'];
@@ -22,7 +21,6 @@ if (isset($_POST['add'])) {
     $BookingTime  = $_POST['BookingTime'];
     $Reason_Notes = $_POST['Reason_Notes'];
     
-    // New bookings default to "Pending" status automatically
     $BookingStatus = "Pending";
 
     $sql = "INSERT INTO bookings (
@@ -63,7 +61,7 @@ if (isset($_POST['add'])) {
                         <h3 class="mb-0">New Car Service Booking</h3>
                     </div>
                     <div class="card-body">
-                        <form action="registerBooking.php" method="POST">
+                        <form action="registerBookings.php" method="POST">
                             
                             <div class="row">
                                 <div class="col-md-6 mb-3">
