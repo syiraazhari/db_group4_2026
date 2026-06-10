@@ -4,33 +4,27 @@ ini_set('display_errors', 1);
 
 // 1. HANDLE DATABASE INSERTION ON FORM SUBMISSION
 if (isset($_POST['add'])) {
-    $conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
+    $conn = mysqli_connect("localhost", "root", "", "carservicebooking(1)");
 
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
-    }
+    }	
 
-    $CustomerName = $_POST['CustomerName'];
-    $PhoneNumber  = $_POST['PhoneNumber'];
-    $Email        = $_POST['Email'];
-    $Address      = $_POST['Address'];
-    $VehicleType  = $_POST['VehicleType'];
-    $PlateNumber  = $_POST['PlateNumber'];
-    $ServiceType  = $_POST['ServiceType'];
-    $BookingDate  = $_POST['BookingDate'];
-    $BookingTime  = $_POST['BookingTime'];
-    $Reason_Notes = $_POST['Reason_Notes'];
-    
-    $BookingStatus = "Pending";
+    $bookingID = $_POST[' bookingID'];
+    $vehicleID  = $_POST['vehicleID'];
+    $email        = $_POST['email'];
+    $bookingDate  = $_POST['bookingDate'];
+    $bookingTime  = $_POST['bookingTime'];
+//    $bookingStatus = $_POST['bookingStatus'];
+	$bookingNotes = $_POST['bookingNotes'];
+    $bookingStatus = "Pending";
 
     $sql = "INSERT INTO bookings (
-                CustomerName, PhoneNumber, Email, Address, 
-                VehicleType, PlateNumber, ServiceType, 
-                BookingDate, BookingTime, Reason_Notes, BookingStatus
+                 bookingID, vehicleID, email,
+                 bookingDate, bookingTime, bookingStatus, bookingNotes;
             ) VALUES (
-                '$CustomerName', '$PhoneNumber', '$Email', '$Address', 
-                '$VehicleType', '$PlateNumber', '$ServiceType', 
-                '$BookingDate', '$BookingTime', '$Reason_Notes', '$BookingStatus'
+                '$bookingID', '$vehicleID', '$email',
+                '$bookingDate', '$bookingTime', '$bookingStatus','$bookingNotes'
             )";
 
     if (mysqli_query($conn, $sql)) {
