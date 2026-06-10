@@ -2,13 +2,12 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking(1)");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_error($conn));
 }
 
-// Order by BookingDate and BookingTime so upcoming appointments show clearly
 $sql = "SELECT * FROM bookings ORDER BY BookingDate DESC, BookingTime DESC";
 $result = mysqli_query($conn, $sql);
 ?>
@@ -25,8 +24,10 @@ $result = mysqli_query($conn, $sql);
         <div class="card shadow-sm">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 <h3 class="mb-0">Car Service Bookings</h3>
-                <button a href="addBooking.php" class="btn btn-primary btn-sm">Add New Booking</a></button>
-				<button a href="viewBookings.php">View Bookings</a> </button>
+                <div class="d-flex gap-2">
+                    <a href="registerBookings.php" class="btn btn-primary btn-sm">Add New Booking</a>
+                    <a href="viewBookings.php" class="btn btn-outline-light btn-sm">View Bookings</a>
+                </div>
             </div>
             <div class="card-body">
                 
@@ -78,7 +79,6 @@ $result = mysqli_query($conn, $sql);
                                 </td>
                                 <td class="text-center">
                                     <?php
-                                    // Dynamic Badge Colors based on the Booking Status
                                     $status = $row['BookingStatus'];
                                     $badgeClass = "bg-secondary";
                                     if ($status == 'Pending') $badgeClass = "bg-warning text-dark";
@@ -100,7 +100,7 @@ $result = mysqli_query($conn, $sql);
                             
                             <?php if(mysqli_num_rows($result) == 0): ?>
                             <tr>
-                                <td colspan="9" class="text-center text-muted py-4">No booking records found.</td>
+                                <td colspan="8" class="text-center text-muted py-4">No booking records found.</td>
                             </tr>
                             <?php endif; ?>
                         </tbody>
@@ -112,5 +112,4 @@ $result = mysqli_query($conn, $sql);
     </div>
 </body>
 </html>
-
 <?php mysqli_close($conn); ?>
