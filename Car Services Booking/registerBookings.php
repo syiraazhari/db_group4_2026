@@ -15,7 +15,6 @@ if (isset($_POST['add'])) {
     $email        = $_POST['email'];
     $bookingDate  = $_POST['bookingDate'];
     $bookingTime  = $_POST['bookingTime'];
-//    $bookingStatus = $_POST['bookingStatus'];
 	$bookingNotes = $_POST['bookingNotes'];
     $bookingStatus = "Pending";
 
