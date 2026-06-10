@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking(1)");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_error($conn));
