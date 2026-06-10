@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Bookings</title>
+
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h1>Manage Bookings</h1>
+
+    <hr>
+
+    <a href="#" class="btn btn-primary">
+        Add New Booking
+    </a>
+
+    <br><br>
+
+    <table class="table table-bordered">
+
+      <thead>
+    <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Vehicle</th>
+        <th>Service</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+		</thead>
+
+        <tbody>
+
+           <tr>
+			<td>1</td>
+			<td>Ali</td>
+			<td>WXY1234</td>
+			<td>Oil Change</td>
+			<td>2026-06-10</td>
+			<td> <span class="badge badge-warning">Pending</span>
+		</td>
+
+   <td>
+    <a href="completeBooking.php?id=1"
+       class="btn btn-success btn-sm">
+       Mark Complete
+    </a>
+</td>
+</tr>
+
+            <tr>
+    <td>2</td>
+    <td>John</td>
+    <td>ABC5678</td>
+    <td>Brake Inspection</td>
+    <td>2026-06-10</td>
+
+    <td>
+        <span class="badge badge-success">
+            Completed
+        </span>
+    </td>
+
+    <td>
+        <button class="btn btn-secondary btn-sm" disabled>
+            Completed
+        </button>
+    </td>
+</tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>
