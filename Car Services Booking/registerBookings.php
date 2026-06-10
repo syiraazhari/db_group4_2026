@@ -10,17 +10,17 @@ if (isset($_POST['add'])) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Sanitize all inputs to prevent SQL Injection
-    $CustomerName = $_POST['CustomerName']);
-    $PhoneNumber  = $_POST['PhoneNumber']);
-    $Email        = $_POST['Email']);
-    $Address      = $_POST['Address']);
-    $VehicleType  = $_POST['VehicleType']);
-    $PlateNumber  = $_POST['PlateNumber']);
-    $ServiceType  = $_POST['ServiceType']);
-    $BookingDate  = $_POST['BookingDate']);
-    $BookingTime  = $_POST['BookingTime']);
-    $Reason_Notes = $_POST['Reason_Notes']);
+    // Fixed: Removed the stray trailing parentheses ')'
+    $CustomerName = $_POST['CustomerName'];
+    $PhoneNumber  = $_POST['PhoneNumber'];
+    $Email        = $_POST['Email'];
+    $Address      = $_POST['Address'];
+    $VehicleType  = $_POST['VehicleType'];
+    $PlateNumber  = $_POST['PlateNumber'];
+    $ServiceType  = $_POST['ServiceType'];
+    $BookingDate  = $_POST['BookingDate'];
+    $BookingTime  = $_POST['BookingTime'];
+    $Reason_Notes = $_POST['Reason_Notes'];
     
     // New bookings default to "Pending" status automatically
     $BookingStatus = "Pending";
@@ -57,7 +57,8 @@ if (isset($_POST['add'])) {
 <body>
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
-            <div class="col-md-8"> <div class="card shadow-sm">
+            <div class="col-md-8"> 
+                <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h3 class="mb-0">New Car Service Booking</h3>
                     </div>
