@@ -32,7 +32,7 @@ if (isset($_POST['login'])) {
             header("Location: admindashboard.php");
             exit();
         } else {
-            header("Location: customerHome.php");
+            header("Location: customerhome.php");
             exit();
         }
 

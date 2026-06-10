@@ -2,35 +2,111 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$conn = mysqli_connect("localhost", "root", "root", "carservicebooking");
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
 if(isset($_POST['add'])){
-    $fName = mysqli_real_escape_string($conn, $_POST['fName']);
-    $lName = mysqli_real_escape_string($conn, $_POST['lName']);
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-	$email = mysqli_real_escape_string($conn, $_POST['email']);
-	$address = mysqli_real_escape_string($conn, $_POST['address']);
-	$contactNo = mysqli_real_escape_string($conn, $_POST['contactNo']);
-	$dob = mysqli_real_escape_string($conn, $_POST['dob']);
-	
-    // Note: id is NOT included because it's AUTO_INCREMENT
-    $sql = "INSERT INTO account (fName, lName, username, password, email, address, contactNo, dob, role) 
-            VALUES ('$fName','$lName','$username',$password','$email','$address','$contactNo','$dob','Customer' )";
-    
-    echo "Debug - SQL Query: " . $sql . "<br><br>"; // For debugging
-    
-    if(mysqli_query($conn, $sql)){
-        echo "Customer added successfully! Redirecting...<br>";
-        header("refresh:2; url=customerList.php?message=Customer added successfully");
+
+    $fName = $_POST['fName'];
+    $lName = $_POST['lName'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
+    $contactNo = $_POST['contactNo'];
+    $dob = $_POST['birthday'];
+
+    // Check if username or email already exists
+    $checkSql = "SELECT * FROM account 
+                 WHERE username = '$username' OR email = '$email'";
+
+    $checkResult = mysqli_query($conn, $checkSql);
+
+    if(mysqli_num_rows($checkResult) > 0){
+
+        echo "
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        </head>
+        <body>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration Failed',
+                    text: 'Username or email is already registered. Please use another one.',
+                    confirmButtonText: 'OK'
+                }).then(function() {
+                    window.location.href = 'registerCustomer.php';
+                });
+            </script>
+        </body>
+        </html>
+        ";
+
         exit();
+
     } else {
-        echo "Error: " . mysqli_error($conn) . "<br>";
-        echo "Please run fix_database.php first to fix the table structure.";
+
+        // Insert new customer
+        $sql = "INSERT INTO account 
+                (fName, lName, username, password, email, address, contactNo, dob, role) 
+                VALUES 
+                ('$fName','$lName','$username','$password','$email','$address','$contactNo','$dob','Customer')";
+
+        if(mysqli_query($conn, $sql)){
+
+            echo "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful',
+                        text: 'Your account has been created successfully!',
+                        confirmButtonText: 'OK'
+                    }).then(function() {
+                        window.location.href = 'login.php';
+                    });
+                </script>
+            </body>
+            </html>
+            ";
+
+            exit();
+
+        } else {
+
+            echo "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Database Error',
+                        text: 'Something went wrong while registering.'
+                    }).then(function() {
+                        window.location.href = 'registerCustomer.php';
+                    });
+                </script>
+            </body>
+            </html>
+            ";
+
+            exit();
+        }
     }
 }
 
