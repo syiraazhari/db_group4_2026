@@ -19,12 +19,12 @@
                         <form action="addnewCustomer.php" method="POST">
                             <div class="mb-3">
                                 <label for="customer_fname" class="form-label">First Name:</label>
-                                <input type="text" class="form-control" id="customer_fname" name="fname" required>
+                                <input type="text" class="form-control" id="customer_fname" name="fName" required>
                             </div>
 						
                             <div class="mb-3">
                                 <label for="customer_lname" class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" id="customer_lname" name="lname" required>
+                                <input type="text" class="form-control" id="customer_lname" name="lName" required>
                             </div>
                             <div class="mb-3">
                                 <label for="contact_no" class="form-label">Contact No:</label>
