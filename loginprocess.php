@@ -13,9 +13,9 @@ if (isset($_POST['login'])) {
     $password = $_POST['passkey'];
 
     $sql = "SELECT username, fName, lName, role 
-            FROM account_tbl
+            FROM account
             WHERE username = '$username' 
-            AND password = '$passkey'";
+            AND password = '$password'";
 
     $result = mysqli_query($conn, $sql);
 

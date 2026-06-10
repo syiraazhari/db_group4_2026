@@ -16,6 +16,7 @@
 
 <body>
 
+            <form action="loginprocess.php" method="POST">
 <div class="container mt-5" style="width:500px">
 
     <div class="card">
@@ -25,7 +26,7 @@
 
         <div class="card-body">
 
-            <form action="loginProcess.php">
+
 
                 <div class="mb-3">
                     <label class="form-label">Username:</label>
