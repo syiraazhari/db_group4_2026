@@ -1,6 +1,6 @@
 <?php
 
-$conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -63,7 +63,7 @@ if(isset($_GET['id'])){
 
     $result = mysqli_query(
         $conn,
-*        "SELECT * FROM booking_tbl WHERE BookingID='$bookingID'"
+        "SELECT * FROM bookings WHERE BookingID='$bookingID'"
     );
 
     $booking = mysqli_fetch_assoc($result);

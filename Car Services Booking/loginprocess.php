@@ -17,7 +17,8 @@ if (isset($_POST['login'])) {
         WHERE username = '$username' 
         AND password = '$password'";
 
-    $result = mysqli_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
+
 
     if (mysqli_num_rows($result) == 1) {
 
@@ -30,6 +31,7 @@ if (isset($_POST['login'])) {
 	$_SESSION['contactNo'] = $row['contactNo'];
 	$_SESSION['address'] = $row['address'];
 	$_SESSION['role'] = $row['role'];
+
 
         if ($row['role'] == "admin") {
             header("Location: admindashboard.php");

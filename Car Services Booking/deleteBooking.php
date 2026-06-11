@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "carservicesbooking");
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -9,7 +9,7 @@ if(isset($_GET['id'])){
 
     $BookingID = mysqli_real_escape_string($conn, $_GET['id']);
 
-*    $sql = "DELETE FROM bookings WHERE BookingID = '$BookingID'";
+    $sql = "DELETE FROM bookings WHERE BookingID = '$BookingID'";
     
     if(mysqli_query($conn, $sql)){
   

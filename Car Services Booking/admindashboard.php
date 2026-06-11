@@ -1,4 +1,69 @@
+<?php
+session_start();
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$conn = mysqli_connect("localhost", "root", "", "carservicebooking");
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Total customers
+$customerSql = "SELECT COUNT(*) AS total FROM account WHERE role = 'Customer'";
+$customerResult = mysqli_query($conn, $customerSql);
+$customerRow = mysqli_fetch_assoc($customerResult);
+$totalCustomers = $customerRow['total'];
+
+// Total vehicles
+$vehicleSql = "SELECT COUNT(*) AS total FROM vehicles";
+$vehicleResult = mysqli_query($conn, $vehicleSql);
+$vehicleRow = mysqli_fetch_assoc($vehicleResult);
+$totalVehicles = $vehicleRow['total'];
+
+// Total bookings
+$bookingSql = "SELECT COUNT(*) AS total FROM bookings";
+$bookingResult = mysqli_query($conn, $bookingSql);
+$bookingRow = mysqli_fetch_assoc($bookingResult);
+$totalBookings = $bookingRow['total'];
+
+// Pending bookings
+$pendingSql = "SELECT COUNT(*) AS total FROM bookings WHERE bookingStatus = 'Pending'";
+$pendingResult = mysqli_query($conn, $pendingSql);
+$pendingRow = mysqli_fetch_assoc($pendingResult);
+$pendingBookings = $pendingRow['total'];
+
+// Completed bookings
+$completedSql = "SELECT COUNT(*) AS total FROM bookings WHERE bookingStatus = 'Completed'";
+$completedResult = mysqli_query($conn, $completedSql);
+$completedRow = mysqli_fetch_assoc($completedResult);
+$completedBookings = $completedRow['total'];
+
+// Today's appointments
+$today = date("Y-m-d");
+
+$todaySql = "SELECT 
+                bookings.bookingID,
+                bookings.bookingTime,
+                bookings.bookingStatus,
+                account.fName,
+                account.lName,
+                vehicles.plateNumber
+            FROM bookings
+            INNER JOIN account 
+                ON bookings.email = account.email
+            INNER JOIN vehicles 
+                ON bookings.vehicleID = vehicles.vehicleID
+            WHERE bookings.bookingDate = '$today'
+            ORDER BY bookings.bookingTime ASC";
+
+$todayResult = mysqli_query($conn, $todaySql);
+
+if (!$todayResult) {
+    die("Today's appointment query failed: " . mysqli_error($conn));
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
