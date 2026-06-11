@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
     .hero-section {
-        background-image:linear-gradient( rgba(0,0,0,0.0),rgba(0,0,0,0.0)), url("repairpicture.png");
+        background-image:linear-gradient( rgba(0,0,0,0.0),rgba(0,0,0,0.0)), url("autocare2.png");
         background-size: cover;
         background-position:top center;
         background-repeat: no-repeat;

@@ -105,7 +105,7 @@ if (isset($_GET['delete'])) {
 
                                 <div class="row g-2 pt-3 border-top mt-auto">
                                     <div class="col-6">
-                                        <a href="registerBookings.php" class="btn btn-primary w-100 btn-sm py-2 shadow-sm">Book Service</a>
+                                        <a href="addBooking.php" class="btn btn-primary w-100 btn-sm py-2 shadow-sm">Book Service</a>
                                     </div>
                                 </div>
                             </div>

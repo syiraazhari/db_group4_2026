@@ -93,97 +93,38 @@ if (!$todayResult) {
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon">
-				<i class="fas fa-car"></i>
-				</div>
-				<div class="sidebar-brand-text mx-3">
-					Car Service Booking
-			</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-			<a class="nav-link" href="customer.php">
-			<i class="fas fa-users"></i>
-			<span>Customers</span>
-		</a>
-		</li>
-
-			<li class="nav-item">
-			<a class="nav-link" href="vehicle.php">
-			<i class="fas fa-car"></i>
-			<span>Vehicles</span>
-		</a>
-	</li>
-
-		<li class="nav-item">
-			<a class="nav-link" href="service.php">
-        <i class="fas fa-tools"></i>
-			<span>Services</span>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admindashboard.php">
+        <div class="sidebar-brand-icon">
+            <i class="fas fa-car"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">
+            Car Service Booking
+        </div>
     </a>
-	</li>
 
-	<li class="nav-item">
-    <a class="nav-link" href="schedule.php">
-        <i class="fas fa-calendar"></i>
-        <span>Schedules</span>
-    </a>
-	</li>
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
-	<li class="nav-item">
-    <a class="nav-link" href="managebookings.php">
-        <i class="fas fa-calendar-check"></i>
-        <span>Bookings</span>
-    </a>
-	</li>
+    <!-- Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="admindashboard.php">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
 
-	<li class="nav-item">
-		<a class="nav-link" href="report.php">
-        <i class="fas fa-file-alt"></i>
-        <span>Reports</span>
-		</a>
-	</li>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+    <!-- Sidebar Toggler -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-            <!-- Sidebar Message -->
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
+</ul>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -403,7 +344,7 @@ if (!$todayResult) {
                         <h1 class="h3 mb-0 text-gray-800">
 							Car Service Booking Dashboard
 						</h1>
-                        <a href="booking.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <a href="bookingCustomer.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-calendar-check fa-sm text-white-50"></i>
 							View Bookings
 						</a>
@@ -738,7 +679,7 @@ if (!$todayResult) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login.php">Logout</a>
                 </div>
             </div>
         </div>
