@@ -4,17 +4,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Make sure user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
 
-// Make sure only customer can access
-if ($_SESSION['role'] != "Customer") {
-    header("Location: login.php");
-    exit();
-}
 
 $conn = mysqli_connect("localhost", "root", "", "carservicebooking");
 
@@ -42,6 +32,7 @@ if (isset($_POST['add'])) {
     $bookingDate = mysqli_real_escape_string($conn, $_POST['bookingDate']);
     $bookingTime = mysqli_real_escape_string($conn, $_POST['bookingTime']);
     $bookingNotes = mysqli_real_escape_string($conn, $_POST['bookingNotes']);
+	$serviceID = mysqli_real_escape_string($conn, $_POST['serviceID']);
     $bookingStatus = "Pending";
 
     // 1. Insert vehicle first
@@ -57,9 +48,9 @@ if (isset($_POST['add'])) {
 
         // 2. Insert booking using vehicleID
         $bookingSql = "INSERT INTO bookings
-                       (email, vehicleID, bookingDate, bookingTime, bookingStatus, bookingNotes)
+                       (email, vehicleID, serviceID, bookingDate, bookingTime, bookingStatus, bookingNotes)
                        VALUES
-                       ('$email', '$vehicleID', '$bookingDate', '$bookingTime', '$bookingStatus', '$bookingNotes')";
+                       ('$email', '$vehicleID', '$serviceID', '$bookingDate', '$bookingTime', '$bookingStatus', '$bookingNotes')";
 
         if (mysqli_query($conn, $bookingSql)) {
             $formSubmitted = true;
@@ -72,7 +63,6 @@ if (isset($_POST['add'])) {
     }
 }
 
-mysqli_close($conn);
 ?>
 
 <?php if ($formSubmitted): ?>
@@ -249,7 +239,21 @@ mysqli_close($conn);
         </div>
 
         <h3>Booking Details</h3>
+		<div class="form-group">
+		<label for="serviceID">Service Type</label>
+		<select id="serviceID" name="serviceID" required>
+		<option value="" disabled selected>-- Select Service --</option>
 
+		<?php
+		$serviceQuery = "SELECT serviceID, serviceName FROM service";
+		$serviceResult = mysqli_query($conn, $serviceQuery);
+
+		while ($service = mysqli_fetch_assoc($serviceResult)) {
+        echo "<option value='" . $service['serviceID'] . "'>" . $service['serviceName'] . "</option>";
+    }
+    ?>
+</select>
+</div>
         <div class="form-group">
             <label for="bookingDate">Booking Date</label>
             <input type="date" id="bookingDate" name="bookingDate" required>
@@ -277,3 +281,4 @@ mysqli_close($conn);
 </html>
 
 <?php endif; ?>
+<?php mysqli_close($conn); ?>

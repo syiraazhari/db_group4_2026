@@ -105,7 +105,19 @@ if (isset($_GET['delete'])) {
 
                                 <div class="row g-2 pt-3 border-top mt-auto">
                                     <div class="col-6">
-                                        <a href="addBooking.php" class="btn btn-primary w-100 btn-sm py-2 shadow-sm">Book Service</a>
+                                    <?php
+									$bookingURL = "addBooking.php?" . http_build_query([
+									"maker" => $vehicle['make'],
+									"model" => $vehicle['model'],
+									"year" => $vehicle['year'],
+									"plateNumber" => $vehicle['plate']
+									]);
+									?>
+
+<a href="<?php echo htmlspecialchars($bookingURL); ?>" 
+   class="btn btn-primary w-100 btn-sm py-2 shadow-sm">
+    Book Service
+</a>
                                     </div>
                                 </div>
                             </div>

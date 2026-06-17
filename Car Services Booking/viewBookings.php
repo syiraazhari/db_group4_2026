@@ -29,6 +29,7 @@ $sql = "SELECT
             bookings.bookingTime,
             bookings.bookingStatus,
             bookings.bookingNotes,
+			service.serviceName,
             vehicles.vehicleType,
             vehicles.maker,
             vehicles.model,
@@ -40,6 +41,8 @@ $sql = "SELECT
         FROM bookings
         INNER JOIN vehicles 
             ON bookings.vehicleID = vehicles.vehicleID
+		INNER JOIN service 
+			ON bookings.serviceID = service.serviceID
         INNER JOIN account 
             ON bookings.email = account.email
         WHERE bookings.email = '$email'
@@ -57,7 +60,11 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <title>Booking List</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -88,6 +95,7 @@ if (!$result) {
                         <th>Model</th>
                         <th>Year</th>
                         <th>Plate Number</th>
+						<th>Service</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Status</th>
@@ -109,13 +117,22 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($row['model']); ?></td>
                                 <td><?php echo htmlspecialchars($row['year']); ?></td>
                                 <td><?php echo htmlspecialchars($row['plateNumber']); ?></td>
+								<td><?php echo htmlspecialchars($row['serviceName']); ?></td>
                                 <td><?php echo htmlspecialchars($row['bookingDate']); ?></td>
                                 <td><?php echo htmlspecialchars($row['bookingTime']); ?></td>
                                 <td><?php echo htmlspecialchars($row['bookingStatus']); ?></td>
                                 <td><?php echo htmlspecialchars($row['bookingNotes']); ?></td>
                                 <td>
-                                    <a href="updateBooking.php?bookingID=<?php echo $row['bookingID']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="deleteBooking.php?bookingID=<?php echo $row['bookingID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this booking?')">Delete</a>
+                                    <a href="updateBooking.php?bookingID=<?php echo htmlspecialchars($row['bookingID']); ?>" 
+                                       class="btn btn-warning btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <a href="deleteBooking.php?bookingID=<?php echo htmlspecialchars($row['bookingID']); ?>" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="confirmDelete(event, this.href);">
+                                        Delete
+                                    </a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -123,7 +140,7 @@ if (!$result) {
                     <?php else: ?>
 
                         <tr>
-                            <td colspan="13" class="text-center">No bookings found.</td>
+                            <td colspan="14" class="text-center">No bookings found.</td>
                         </tr>
 
                     <?php endif; ?>
@@ -136,6 +153,28 @@ if (!$result) {
     </div>
 
 </div>
+
+<script>
+function confirmDelete(event, deleteUrl) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: "Are you sure you want to delete the booking?",
+        text: "This booking will be permanently deleted.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = deleteUrl;
+        }
+    });
+}
+</script>
+
 </body>
 </html>
 
