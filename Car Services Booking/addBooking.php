@@ -16,6 +16,10 @@ if (!$conn) {
 $username = $_SESSION['username'];
 $email = $_SESSION['email'];
 $fullName = $_SESSION['fName'] . " " . $_SESSION['lName'];
+$makerValue = isset($_GET['maker']) ? $_GET['maker'] : "";
+$modelValue = isset($_GET['model']) ? $_GET['model'] : "";
+$yearValue = isset($_GET['year']) ? $_GET['year'] : "";
+$plateValue = isset($_GET['plateNumber']) ? $_GET['plateNumber'] : "";
 
 $formSubmitted = false;
 
@@ -220,22 +224,22 @@ if (isset($_POST['add'])) {
 
         <div class="form-group">
             <label for="maker">Maker</label>
-            <input type="text" id="maker" name="maker" placeholder="Example: Perodua, Proton, Honda" required>
+            <input type="text" id="maker" name="maker" value="<?php echo htmlspecialchars($makerValue); ?>" placeholder="Example: Perodua, Proton, Honda" required>
         </div>
 
         <div class="form-group">
             <label for="model">Model</label>
-            <input type="text" id="model" name="model" placeholder="Example: Myvi, Saga, Civic" required>
+            <input type="text" id="model" name="model" value="<?php echo htmlspecialchars($modelValue); ?>" placeholder="Example: Myvi, Saga, Civic" required>
         </div>
 
         <div class="form-group">
             <label for="year">Year</label>
-            <input type="number" id="year" name="year" placeholder="Example: 2020" required>
+            <input type="number" id="year" name="year" value="<?php echo htmlspecialchars($yearValue); ?>" placeholder="Example: 2020" required>
         </div>
 
         <div class="form-group">
             <label for="plateNumber">Plate Number</label>
-            <input type="text" id="plateNumber" name="plateNumber" placeholder="Example: ABC1234" required>
+            <input type="text" id="plateNumber" name="plateNumber" value="<?php echo htmlspecialchars($plateValue); ?>" placeholder="Example: ABC1234" required>
         </div>
 
         <h3>Booking Details</h3>

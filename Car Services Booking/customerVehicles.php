@@ -46,6 +46,7 @@ if (isset($_GET['delete'])) {
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-light">
 
@@ -83,9 +84,12 @@ if (isset($_GET['delete'])) {
                                             <span class="badge bg-primary-subtle text-primary text-uppercase px-2.5 py-1.5 rounded-pill font-monospace small"><?php echo $vehicle['make']; ?></span>
                                             <h3 class="h5 fw-bold text-dark mt-2 mb-1"><?php echo $vehicle['nickname']; ?></h3>
                                         </div>
-                                        <a href="?delete=<?php echo $vehicle['id']; ?>" onclick="return confirm('Remove this vehicle?')" class="text-secondary link-danger" title="Delete Vehicle">
-                                            <i class="bi bi-trash3 fs-5"></i>
-                                        </a>
+											<a href="?delete=<?php echo $vehicle['id']; ?>" 
+											onclick="confirmDelete(event, this.href);" 
+											class="text-secondary link-danger" 
+											title="Delete Vehicle">
+											<i class="bi bi-trash3 fs-5"></i>
+											</a>
                                     </div>
 
                                     <p class="text-muted small mb-3"><?php echo $vehicle['make'] . ' ' . $vehicle['model'] . ' (' . $vehicle['year'] . ')'; ?></p>
@@ -114,10 +118,10 @@ if (isset($_GET['delete'])) {
 									]);
 									?>
 
-<a href="<?php echo htmlspecialchars($bookingURL); ?>" 
-   class="btn btn-primary w-100 btn-sm py-2 shadow-sm">
-    Book Service
-</a>
+								<a href="<?php echo htmlspecialchars($bookingURL); ?>" 
+								class="btn btn-primary w-100 btn-sm py-2 shadow-sm">
+								Book Service
+								</a>
                                     </div>
                                 </div>
                             </div>
@@ -154,6 +158,8 @@ if (isset($_GET['delete'])) {
                                     <option value="Honda">Honda</option>
                                     <option value="Toyota">Toyota</option>
                                     <option value="Nissan">Nissan</option>
+									<option value="Nissan">Jaecoo</option>
+									<option value="Nissan">Jetour</option>
                                 </select>
                             </div>
                             <div class="col-6">
@@ -182,7 +188,26 @@ if (isset($_GET['delete'])) {
             </div>
         </div>
     </div>
+<script>
+function confirmDelete(event, deleteUrl) {
+    event.preventDefault();
 
+    Swal.fire({
+        title: "Delete this vehicle?",
+        text: "This registered vehicle will be removed.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = deleteUrl;
+        }
+    });
+}
+</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

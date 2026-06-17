@@ -40,6 +40,16 @@ $completedResult = mysqli_query($conn, $completedSql);
 $completedRow = mysqli_fetch_assoc($completedResult);
 $completedBookings = $completedRow['total'];
 
+$approvedSql = "SELECT COUNT(*) AS total FROM bookings WHERE bookingStatus = 'Approved'";
+$approvedResult = mysqli_query($conn, $approvedSql);
+$approvedRow = mysqli_fetch_assoc($approvedResult);
+$approvedBookings = $approvedRow['total'];
+
+$cancelledSql = "SELECT COUNT(*) AS total FROM bookings WHERE bookingStatus = 'Cancelled'";
+$cancelledResult = mysqli_query($conn, $cancelledSql);
+$cancelledRow = mysqli_fetch_assoc($cancelledResult);
+$cancelledBookings = $cancelledRow['total'];
+
 // Today's appointments
 $today = date("Y-m-d");
 
@@ -397,18 +407,9 @@ if (!$todayResult) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Manage Bookings
                                             </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $totalBookings; ?></div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+											<div class="h5 mb-0 font-weight-bold text-gray-800">
+											<?php echo $totalBookings; ?>
+											</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -517,17 +518,15 @@ if (!$todayResult) {
                                     <div class="chart-pie pt-4 pb-2">
                                         <canvas id="myPieChart"></canvas>
                                     </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Pending
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Approved
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Completed
-                                        </span>
-                                    </div>
+									<div class="mt-4 text-center small">
+									<span class="mr-2">
+									<i class="fas fa-circle" style="color:#f6c23e;"></i> Pending
+									</span>
+
+									<span class="mr-2">
+									<i class="fas fa-circle" style="color:#1cc88a;"></i> Completed
+									</span>
+									</div>
                                 </div>
                             </div>
                         </div>
@@ -697,10 +696,35 @@ if (!$todayResult) {
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
+	<script>
+var ctx = document.getElementById("myPieChart");
+
+var myPieChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ["Pending", "Completed"],
+        datasets: [{
+            data: [
+                <?php echo $pendingBookings; ?>,
+                <?php echo $completedBookings; ?>
+            ],
+            backgroundColor: ['#f6c23e', '#1cc88a'],
+            hoverBackgroundColor: ['#dda20a', '#17a673']
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+        cutoutPercentage: 80
+    }
+});
+</script>
 
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+	
 
 </body>
 

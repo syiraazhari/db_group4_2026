@@ -56,6 +56,7 @@ if (!$result) {
     <title>Customer Bookings</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="bg-light">
@@ -144,11 +145,11 @@ if (!$result) {
 
                                     <td>
                                         <?php if ($row['bookingStatus'] != "Completed"): ?>
-                                            <a href="completeBooking.php ?bookingID=<?php echo $row['bookingID']; ?>" 
-                                               class="btn btn-success btn-sm"
-                                               onclick="return confirm('Mark this booking as completed?');">
-                                                Complete
-                                            </a>
+										<a href="completeBooking.php ?bookingID=<?php echo $row['bookingID']; ?>" 
+										class="btn btn-success btn-sm"
+										onclick="confirmComplete(event, this.href);">
+										Complete
+										</a>
                                         <?php else: ?>
                                             <button class="btn btn-secondary btn-sm" disabled>
                                                 Completed
@@ -173,7 +174,26 @@ if (!$result) {
     </div>
 
 </div>
+<script>
+function confirmComplete(event, completeUrl) {
+    event.preventDefault();
 
+    Swal.fire({
+        title: "Complete this booking?",
+        text: "This booking status will be changed to Completed.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#198754",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, complete it",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = completeUrl;
+        }
+    });
+}
+</script>
 </body>
 </html>
 

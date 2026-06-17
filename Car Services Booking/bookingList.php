@@ -4,8 +4,6 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-
-
 $conn = mysqli_connect("localhost", "root", "", "carservicebooking");
 
 if (!$conn) {
@@ -17,33 +15,28 @@ $email = $_SESSION['email'];
 $sql = "SELECT 
             bookings.bookingID,
             bookings.email,
-            bookings.vehicleID,
             bookings.bookingDate,
             bookings.bookingTime,
             bookings.bookingStatus,
             bookings.bookingNotes,
-
-            account.fName,
-            account.lName,
-            account.contactNo,
-
+            service.serviceName,
             vehicles.vehicleType,
             vehicles.maker,
             vehicles.model,
             vehicles.year,
-            vehicles.plateNumber
-
+            vehicles.plateNumber,
+            account.fName,
+            account.lName,
+            account.contactNo
         FROM bookings
-
-        INNER JOIN account
-            ON bookings.email = account.email
-
-        INNER JOIN vehicles
+        INNER JOIN vehicles 
             ON bookings.vehicleID = vehicles.vehicleID
-
+        INNER JOIN service 
+            ON bookings.serviceID = service.serviceID
+        INNER JOIN account 
+            ON bookings.email = account.email
         WHERE bookings.email = '$email'
-
-        ORDER BY bookings.bookingDate DESC, bookings.bookingTime DESC";
+        ORDER BY bookings.bookingID DESC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -56,161 +49,119 @@ if (!$result) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Booking List</title>
+    <title>Booking List</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-light">
+<body>
+<div class="container mt-5">
 
-<div class="container-fluid mt-5 px-4">
-    <div class="card shadow-sm">
-
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">My Car Service Bookings</h3>
-
-            <div class="d-flex gap-2">
-                <a href="addBooking.php" class="btn btn-primary btn-sm">Add New Booking</a>
-                <a href="customerhome.php" class="btn btn-outline-light btn-sm">Back to Home</a>
-            </div>
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3>Your Bookings</h3>
+            <a href="addBooking.php" class="btn btn-light">Add New Booking</a>
         </div>
 
         <div class="card-body">
 
             <?php if(isset($_GET['message'])): ?>
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="alert alert-success">
                     <?php echo htmlspecialchars($_GET['message']); ?>
                 </div>
             <?php endif; ?>
 
-            <div class="table-responsive">
-                <table class="table table-hover table-striped table-bordered align-middle">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Name</th>
+                        <th>Contact No.</th>
+                        <th>Vehicle Type</th>
+                        <th>Maker</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Plate Number</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-                    <thead class="table-secondary">
-                        <tr>
-                            <th>Booking ID</th>
-                            <th>Customer Name</th>
-                            <th>Contact Details</th>
-                            <th>Vehicle Details</th>
-                            <th>Schedule</th>
-                            <th>Notes</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
+                <tbody>
+                    <?php if (mysqli_num_rows($result) > 0): ?>
 
-                    <tbody>
-
-                        <?php if(mysqli_num_rows($result) > 0): ?>
-
-                            <?php while($row = mysqli_fetch_assoc($result)): ?>
-
-                                <tr>
-                                    <td><?php echo htmlspecialchars($row['bookingID']); ?></td>
-
-                                    <td>
-                                        <?php echo htmlspecialchars($row['fName'] . " " . $row['lName']); ?>
-                                    </td>
-
-                                    <td>
-                                        <small>
-                                            📱 <?php echo htmlspecialchars($row['contactNo']); ?><br>
-                                            📧 <?php echo htmlspecialchars($row['email']); ?>
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge bg-secondary">
-                                            <?php echo htmlspecialchars($row['plateNumber']); ?>
-                                        </span>
-                                        <br>
-
-                                        <small class="text-muted">
-                                            <?php 
-                                                echo htmlspecialchars(
-                                                    $row['vehicleType'] . " - " .
-                                                    $row['maker'] . " " .
-                                                    $row['model'] . " (" .
-                                                    $row['year'] . ")"
-                                                );
-                                            ?>
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        <small>
-                                            📅 <?php echo htmlspecialchars($row['bookingDate']); ?><br>
-                                            ⏰ <?php echo htmlspecialchars($row['bookingTime']); ?>
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        <small class="text-truncate d-inline-block" 
-                                               style="max-width: 150px;" 
-                                               title="<?php echo htmlspecialchars($row['bookingNotes']); ?>">
-                                            <?php echo htmlspecialchars($row['bookingNotes']); ?>
-                                        </small>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <?php
-                                            $status = $row['bookingStatus'];
-                                            $badgeClass = "bg-secondary";
-
-                                            if ($status == "Pending") {
-                                                $badgeClass = "bg-warning text-dark";
-                                            } else if ($status == "Approved") {
-                                                $badgeClass = "bg-primary";
-                                            } else if ($status == "Completed") {
-                                                $badgeClass = "bg-success";
-                                            } else if ($status == "Cancelled") {
-                                                $badgeClass = "bg-danger";
-                                            }
-                                        ?>
-
-                                        <span class="badge <?php echo $badgeClass; ?>">
-                                            <?php echo htmlspecialchars($status); ?>
-                                        </span>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <?php if ($row['bookingStatus'] != "Completed"): ?>
-
-                                            <a href="deleteBooking.php?bookingID=<?php echo $row['bookingID']; ?>" 
-                                               class="btn btn-danger btn-sm"
-                                               onclick="return confirm('Are you sure you want to delete this booking?');">
-                                                Delete
-                                            </a>
-
-                                        <?php else: ?>
-
-                                            <button class="btn btn-secondary btn-sm" disabled>
-                                                Locked
-                                            </button>
-
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-
-                            <?php endwhile; ?>
-
-                        <?php else: ?>
-
+                        <?php while($row = mysqli_fetch_assoc($result)): ?>
                             <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
-                                    No booking records found.
+                                <td><?php echo htmlspecialchars($row['bookingID']); ?></td>
+                                <td><?php echo htmlspecialchars($row['fName'] . " " . $row['lName']); ?></td>
+                                <td><?php echo htmlspecialchars($row['contactNo']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicleType']); ?></td>
+                                <td><?php echo htmlspecialchars($row['maker']); ?></td>
+                                <td><?php echo htmlspecialchars($row['model']); ?></td>
+                                <td><?php echo htmlspecialchars($row['year']); ?></td>
+                                <td><?php echo htmlspecialchars($row['plateNumber']); ?></td>
+                                <td><?php echo htmlspecialchars($row['serviceName']); ?></td>
+                                <td><?php echo htmlspecialchars($row['bookingDate']); ?></td>
+                                <td><?php echo htmlspecialchars($row['bookingTime']); ?></td>
+                                <td><?php echo htmlspecialchars($row['bookingStatus']); ?></td>
+                                <td><?php echo htmlspecialchars($row['bookingNotes']); ?></td>
+                                <td>
+                                    <a href="updateBooking.php?bookingID=<?php echo htmlspecialchars($row['bookingID']); ?>" 
+                                       class="btn btn-warning btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <a href="deleteBooking.php?bookingID=<?php echo htmlspecialchars($row['bookingID']); ?>" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="confirmDelete(event, this.href);">
+                                        Delete
+                                    </a>
                                 </td>
                             </tr>
+                        <?php endwhile; ?>
 
-                        <?php endif; ?>
+                    <?php else: ?>
 
-                    </tbody>
+                        <tr>
+                            <td colspan="14" class="text-center">No bookings found.</td>
+                        </tr>
 
-                </table>
-            </div>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+
+            <a href="customerhome.php" class="btn btn-secondary">Back to Home</a>
 
         </div>
     </div>
+
 </div>
+
+<script>
+function confirmDelete(event, deleteUrl) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: "Are you sure you want to delete the booking?",
+        text: "This booking will be permanently deleted.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = deleteUrl;
+        }
+    });
+}
+</script>
 
 </body>
 </html>
